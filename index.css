@@ -1,0 +1,79 @@
+/* 기본 리셋 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* 기본 스크롤바 숨김 */
+    font-family: 'Arial', sans-serif;
+}
+
+/* 슬라이드 컨테이너: CSS 스크롤 스냅 적용 */
+.slide-container {
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory; /* 세로 방향으로 강제 스냅 */
+    scroll-behavior: smooth; /* 부드러운 이동 */
+}
+
+/* 각 섹션을 뷰포트 크기(100vh)로 고정 */
+.v-slide {
+    width: 100%;
+    height: 100vh;
+    scroll-snap-align: start; /* 스크롤이 끝날 때 섹션 시작점에 맞춤 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* 섹션별 배경색 구분을 위한 스타일 */
+.section-1 { background: #1a1a2e; }
+.section-2 { background: #16213e; }
+.section-3 { background: #0f3460; }
+.section-4 { background: #e94560; }
+
+.v-slide h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+}
+
+.v-slide p {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* 우측 내비게이션 점(Dots) 스타일 */
+.nav-dots {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 10;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active, .dot:hover {
+    background-color: #fff;
+    transform: scale(1.3);
+}
