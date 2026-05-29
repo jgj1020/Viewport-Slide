@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-user-select: none; /* 제스처 시 텍스트 블록 잡힘 방지 */
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -35,7 +35,7 @@ body, html {
     color: white;
     text-align: center;
     padding: 20px;
-    position: relative; /* 카드 배치를 위해 relative 지정 */
+    position: relative;
     overflow: hidden;
 }
 
@@ -43,7 +43,7 @@ body, html {
 .section-1 { background: #1a1a2e; }
 .section-2 { background: #16213e; }
 .section-3 { background: #0f3460; }
-.section-4 { background: #111116; } /* 카드 부각을 위해 어둡게 변경 */
+.section-4 { background: #111116; }
 
 .v-slide h1 {
     font-size: 4rem;
@@ -56,17 +56,38 @@ body, html {
     opacity: 0.8;
 }
 
-/* 안내 메시지 애니메이션 */
-.guide-text i {
-    animation: bounceUp 1.5s infinite;
-    display: block;
-    margin-bottom: 8px;
-    font-size: 1.5rem;
+/* 폰 흔들기 아이콘 애니메이션 */
+.shake-icon {
+    display: inline-block;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    animation: phoneShake 1.2s infinite ease-in-out;
 }
 
-@keyframes bounceUp {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+@keyframes phoneShake {
+    0%, 100% { transform: rotate(0deg); }
+    20%, 60% { transform: rotate(-15deg); }
+    40%, 80% { transform: rotate(15deg); }
+}
+
+/* 센서 활성화 버튼 스타일 */
+.sensor-activate-btn {
+    margin-top: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    border-radius: 30px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: all 0.3s;
+}
+
+.sensor-activate-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
 /* 우측 내비게이션 점(Dots) */
@@ -100,6 +121,9 @@ body, html {
     opacity: 0;
     transform: translateY(40px);
     transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .v-slide.active .animate-target {
@@ -107,12 +131,10 @@ body, html {
     transform: translateY(0);
 }
 
-/* ==========================================
-   💳 삼성 페이 스타일 명함 (핵심 디자인)
-   ========================================== */
+/* 💳 삼성 페이 스타일 명함 */
 .samsung-card {
     position: absolute;
-    bottom: -450px; /* 처음에는 화면 아래에 완벽히 숨김 */
+    bottom: -500px;
     width: 340px;
     height: 480px;
     background: linear-gradient(135deg, #2b2b36 0%, #111115 100%);
@@ -125,22 +147,19 @@ body, html {
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6);
     z-index: 100;
     cursor: grab;
-    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15); /* 올라올 때 팅기는 찰진 탄성 */
+    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.15);
 }
 
-/* 카드가 등장했을 때 활성화되는 클래스 */
 .samsung-card.open {
-    bottom: 40px; /* 화면 하단 적정 높이까지 슥 올라옴 */
+    bottom: 40px;
     cursor: default;
 }
 
-/* 카드 IC칩 디자인 */
 .card-chip {
     width: 50px;
     height: 40px;
     background: linear-gradient(135deg, #cc9933, #eedd88);
     border-radius: 8px;
-    position: relative;
 }
 
 .card-info {
@@ -165,7 +184,6 @@ body, html {
     margin-top: 5px;
 }
 
-/* 카드 내부 링크 버튼 스타일 */
 .card-footer-links {
     display: flex;
     flex-direction: column;
@@ -192,7 +210,6 @@ body, html {
     transform: translateX(5px);
 }
 
-/* 닫기 버튼 */
 .close-card-btn {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.3);
