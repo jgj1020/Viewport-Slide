@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Viewport Slide Website</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
@@ -17,25 +18,45 @@
 
     <main class="slide-container">
         <section class="v-slide section-1">
-            <h1>01. WELCOME</h1>
-            <p>뷰포트 슬라이드 웹사이트에 오신 것을 환영합니다.</p>
+            <div class="animate-target">
+                <h1>01. WELCOME</h1>
+                <p>뷰포트 슬라이드 웹사이트에 오신 것을 환영합니다.</p>
+            </div>
         </section>
         
         <section class="v-slide section-2">
-            <h1>02. ABOUT</h1>
-            <p>스크롤을 내리면 화면이 한 칸씩 딱 맞게 넘어갑니다.</p>
+            <div class="animate-target">
+                <h1>02. ABOUT</h1>
+                <p>스크롤을 내리면 화면이 한 칸씩 딱 맞게 넘어갑니다.</p>
+            </div>
         </section>
         
         <section class="v-slide section-3">
-            <h1>03. WORK</h1>
-            <p>CSS의 scroll-snap 기능을 활용해 부드럽습니다.</p>
+            <div class="animate-target">
+                <h1>03. WORK</h1>
+                <p>CSS의 scroll-snap 기능을 활용해 부드럽습니다.</p>
+            </div>
         </section>
         
         <section class="v-slide section-4">
-            <h1>04. CONTACT</h1>
-            <p>깔끔하고 트렌디한 웹사이트를 만들어보세요.</p>
+            <div class="animate-target">
+                <h1>04. CONTACT</h1>
+                <p>깔끔하고 트렌디한 웹사이트를 만들어보세요.</p>
+            </div>
         </section>
     </main>
+
+    <div class="profile-card">
+        <div class="card-header">
+            <span class="name">Jang Kyeong Jun</span>
+            <span class="student-id">s2433</span>
+        </div>
+        <div class="card-links">
+            <a href="mailto:s2433@e-mirim.hs.kr" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://github.com/jgj1020" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://www.instagram.com/jgj1020" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
 
     <script src="index.js"></script>
 </body>
