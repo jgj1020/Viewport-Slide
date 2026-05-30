@@ -5,6 +5,7 @@ const card = document.getElementById('my-card');
 const gestureZone = document.getElementById('gesture-zone');
 const sensorBtn = document.getElementById('sensor-btn');
 
+// 1. 점(Dot) 클릭 이동
 function scrollToSlide(index) {
     const slideHeight = window.innerHeight;
     container.scrollTo({
@@ -13,6 +14,8 @@ function scrollToSlide(index) {
     });
 }
 
+// 2. 휠 스크롤 템포 브레이크 및 액티브 스위치
+let isScrolling = false;
 container.addEventListener('scroll', () => {
     const slideHeight = window.innerHeight;
     const scrollTop = container.scrollTop;
@@ -47,12 +50,13 @@ function toggleCard(select) {
     }
 }
 
-// 🖐️ 드래그 제스처
+// ==========================================
+// 🖐️ ↕️ 양방향 드래그 제스처 시스템 (위/아래 완벽 지원)
+// ==========================================
 let startY = 0;
 let isDragging = false;
 
 function handleStart(e) {
-    if (card.classList.contains('open')) return;
     isDragging = true;
     startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
 }
@@ -60,10 +64,17 @@ function handleStart(e) {
 function handleMove(e) {
     if (!isDragging) return;
     const currentY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
-    const diffY = startY - currentY;
+    const diffY = startY - currentY; // 거리가 양수면 위로 올림, 음수면 아래로 내림
 
-    if (diffY > 60) {
+    // 1. 카드가 닫혀있을 때 -> 위로 올리면 열림
+    if (!card.classList.contains('open') && diffY > 60) {
         toggleCard(true);
+        isDragging = false;
+    }
+    
+    // 2. 카드가 열려있을 때 -> 아래로 내리면 다시 닫힘 (추가된 로직!)
+    if (card.classList.contains('open') && diffY < -60) {
+        toggleCard(false);
         isDragging = false;
     }
 }
@@ -99,9 +110,7 @@ function deviceMotionHandler(event) {
 
             if (speed > SHAKE_THRESHOLD && !card.classList.contains('open')) {
                 toggleCard(true);
-                if (navigator.vibrate) {
-                    navigator.vibrate(200);
-                }
+                if (navigator.vibrate) navigator.vibrate(200);
             }
         }
         lastX = x; lastY = y; lastZ = z;
