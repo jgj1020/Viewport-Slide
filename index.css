@@ -1,9 +1,11 @@
-/* 기본 리셋 */
+/* ==========================================
+   📌 1. 기본 리셋 및 글로벌 스타일
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-user-select: none;
+    -webkit-user-select: none; /* 드래그 제스처 시 텍스트 블록 잡힘 방지 */
     user-select: none;
 }
 
@@ -15,22 +17,35 @@ body, html {
     background: #0d0d13;
 }
 
-/* ⏳ 스크롤 속도 조절을 위한 컨테이너 세팅 */
+/* ==========================================
+   ⏳ 2. 슬라이드 컨테이너 (스크롤 템포 및 스크롤바 숨김)
+   ========================================== */
 .slide-container {
     width: 100%;
     height: 100vh;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
-    /* 스크롤 마찰력 강화 */
     scroll-stop-preference: top; 
+
+    /* 🚫 우측 스크롤바 선 감추기 기능 (기능은 정상 작동) */
+    -ms-overflow-style: none; /* IE, Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
+/* 크롬, 사파리, 오페라 브라우저 스크롤바 숨김 */
+.slide-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* ==========================================
+   🏢 3. 섹션 레이아웃 & 배경색
+   ========================================== */
 .v-slide {
     width: 100%;
     height: 100vh;
     scroll-snap-align: start;
-    scroll-snap-stop: always; /* 한 번에 한 칸씩만 딱딱 걸리도록 강제 설정 */
+    scroll-snap-stop: always; /* 한 칸씩 딱딱 걸리도록 강제 */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -42,13 +57,15 @@ body, html {
     overflow: hidden;
 }
 
-/* 고대비 힙한 배경 톤으로 수정 */
+/* 고대비 힙한 배경 톤 */
 .section-1 { background: #0b0c10; }
 .section-2 { background: #1f2833; }
 .section-3 { background: #0b132b; }
 .section-4 { background: #09090b; }
 
-/* 🌟 요즘 세대 스타일 타이포그래피 (스케일 업 애니메이션 타겟) */
+/* ==========================================
+   🌟 4. 요즘 세대 타이포그래피 & 안내 아이콘
+   ========================================== */
 .v-slide h1 {
     font-size: 4.5rem;
     font-weight: 900;
@@ -62,12 +79,12 @@ body, html {
 
 .v-slide p {
     font-size: 1.25rem;
-    color: #ffffff; /* 연보라색 포인트 톤 */
+    color: #ffffff; /* 연보라색 포인트 */
     opacity: 0.9;
     font-weight: 500;
 }
 
-/* 폰 흔들기 애니메이션 */
+/* 폰 흔들기 아이콘 애니메이션 */
 .shake-icon {
     display: inline-block;
     font-size: 2.2rem;
@@ -81,7 +98,7 @@ body, html {
     50% { transform: rotate(15deg) scale(1.1); }
 }
 
-/* 센서 활성화 버튼 */
+/* 모바일 센서 활성화 버튼 */
 .sensor-activate-btn {
     margin-top: 30px;
     background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
@@ -101,7 +118,27 @@ body, html {
     box-shadow: 0 8px 25px rgba(0, 242, 254, 0.6);
 }
 
-/* 우측 내비게이션 점 */
+/* ==========================================
+   💥 5. 통통 튀는 등장 애니메이션 (Cubic-Bezier)
+   ========================================== */
+.animate-target {
+    opacity: 0;
+    transform: translateY(60px) scale(0.85);
+    /* 쫀득하게 늘어났다가 제자리로 튕기며 찾아오는 가속도 공식 */
+    transition: all 1s cubic-bezier(0.68, -0.6, 0.32, 1.6); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.v-slide.active .animate-target {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* ==========================================
+   📍 6. 우측 인디케이터 점(Dots)
+   ========================================== */
 .nav-dots {
     position: fixed;
     right: 30px;
@@ -125,31 +162,15 @@ body, html {
 .dot.active {
     background-color: #ffffff;
     transform: scale(1.6);
-    box-shadow: 0 0 10px #4cf6ff;
+    box-shadow: 0 0 10px #00f2fe;
 }
 
 /* ==========================================
-   💥 통통 튀는 Z세대 감성 애니메이션 (Cubic-Bezier)
+   💳 7. 삼성 페이 스타일 명함 카드
    ========================================== */
-.animate-target {
-    opacity: 0;
-    transform: translateY(60px) scale(0.85);
-    /* 쫀득하게 늘어났다가 제자리로 찾아오는 가속도 공식 */
-    transition: all 1s cubic-bezier(0.68, -0.6, 0.32, 1.6); 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.v-slide.active .animate-target {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
-/* 💳 삼성 페이 스타일 명함 */
 .samsung-card {
     position: absolute;
-    bottom: -550px;
+    bottom: -550px; /* 초기 상태: 화면 아래에 숨김 */
     width: 340px;
     height: 500px;
     background: linear-gradient(135deg, #181920 0%, #050508 100%);
@@ -162,20 +183,20 @@ body, html {
     box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.8);
     z-index: 100;
     cursor: grab;
-    /* 카드가 튀어 올라올 때도 통통 튀게 적용 */
+    /* 카드가 튀어 올라올 때 찰지게 튕기는 젤리 탄성 적용 */
     transition: bottom 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .samsung-card.open {
-    bottom: 50px;
+    bottom: 50px; /* 활성화 시 올라오는 높이 */
     cursor: grab;
-    border-color: rgba(255, 255, 255, 0.6);
+    border-color: rgb(41, 145, 213);
     box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
 }
 
 .card-chip {
-    width: 57px;
-    height: 30px;
+    width: 47px;
+    height: 35px;
     background: linear-gradient(135deg, #e5c060, #ffeeaa);
     border-radius: 10px;
 }
@@ -209,6 +230,7 @@ body, html {
     margin-top: 12px;
 }
 
+/* 카드 하단 링크 단추들 */
 .card-footer-links {
     display: flex;
     flex-direction: column;
@@ -259,13 +281,32 @@ body, html {
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-/* 📱 모바일 반응형 조절 */
+/* ==========================================
+   📱 8. 모바일 & 태블릿 최적화 반응형 레이아웃
+   ========================================== */
 @media screen and (max-width: 480px) {
-    .v-slide h1 { font-size: 2.8rem; }
-    .v-slide p { font-size: 1rem; }
+    .v-slide h1 {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+    }
+    
+    .v-slide p {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+
+    .nav-dots {
+        right: 15px;
+        gap: 12px;
+    }
+
+    /* 모바일 화면 크기에 맞춰 명함 카드 비율 슬림하게 조절 */
     .samsung-card {
         width: 92%;
         height: 480px;
     }
-    .samsung-card.open { bottom: 20px; }
+    
+    .samsung-card.open {
+        bottom: 20px;
+    }
 }
