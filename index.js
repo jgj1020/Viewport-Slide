@@ -14,8 +14,7 @@ function scrollToSlide(index) {
     });
 }
 
-// 2. 휠 스크롤 템포 브레이크 및 액티브 스위치
-let isScrolling = false;
+// 2. 스크롤 스냅 감지 및 액티브 클래스 부여
 container.addEventListener('scroll', () => {
     const slideHeight = window.innerHeight;
     const scrollTop = container.scrollTop;
@@ -42,16 +41,21 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// ⚡ 카드 상태 토글 및 배경 스크롤 제어
 function toggleCard(select) {
     if (select) {
         card.classList.add('open');
+        // 🚫 카드가 열리면 전체 화면 스크롤을 완전히 잠급니다.
+        container.style.overflowY = 'hidden';
     } else {
         card.classList.remove('open');
+        // 🔓 카드가 닫히면 전체 화면 스크롤을 다시 허용합니다.
+        container.style.overflowY = 'scroll';
     }
 }
 
 // ==========================================
-// 🖐️ ↕️ 양방향 드래그 제스처 시스템 (위/아래 완벽 지원)
+// 🖐️ ↕️ 양방향 드래그 제스처 시스템 (스크롤 간섭 차단 예외처리)
 // ==========================================
 let startY = 0;
 let isDragging = false;
@@ -64,31 +68,43 @@ function handleStart(e) {
 function handleMove(e) {
     if (!isDragging) return;
     const currentY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
-    const diffY = startY - currentY; // 거리가 양수면 위로 올림, 음수면 아래로 내림
+    const diffY = startY - currentY; // 위로 올리면 (+), 아래로 내리면 (-)
 
-    // 1. 카드가 닫혀있을 때 -> 위로 올리면 열림
-    if (!card.classList.contains('open') && diffY > 60) {
+    // 카드가 열려있는 상태에서 아래로 쓸어내릴 때 브라우저의 기본 스크롤 동작을 무조건 막음!
+    if (card.classList.contains('open') && diffY < 0) {
+        if (e.cancelable) e.preventDefault(); 
+    }
+
+    // 1. 위로 드래그 -> 카드가 닫혀있을 때 꺼내기
+    if (diffY > 60 && !card.classList.contains('open')) {
         toggleCard(true);
         isDragging = false;
     }
     
-    // 2. 카드가 열려있을 때 -> 아래로 내리면 다시 닫힘 (추가된 로직!)
-    if (card.classList.contains('open') && diffY < -60) {
+    // 2. 아래로 드래그 -> 카드가 열려있을 때 집어넣기
+    if (diffY < -60 && card.classList.contains('open')) {
         toggleCard(false);
         isDragging = false;
     }
 }
 
-function handleEnd() { isDragging = false; }
+function handleEnd() { 
+    isDragging = false; 
+}
 
+// 스크롤 락을 위해 passive 옵션을 false로 강제 설정하여 preventDefault가 작동하도록 함
 gestureZone.addEventListener('touchstart', handleStart, { passive: true });
-gestureZone.addEventListener('touchmove', handleMove, { passive: true });
+gestureZone.addEventListener('touchmove', handleMove, { passive: false }); // 중요! false로 변경
 gestureZone.addEventListener('touchend', handleEnd);
+
 gestureZone.addEventListener('mousedown', handleStart);
 gestureZone.addEventListener('mousemove', handleMove);
 window.addEventListener('mouseup', handleEnd);
 
-// 📳 흔들기 센서
+
+// ==========================================
+// 📳 스마트폰 흔들기(Shake) 센서
+// ==========================================
 let lastX = null, lastY = null, lastZ = null;
 let lastUpdate = 0;
 const SHAKE_THRESHOLD = 800;
