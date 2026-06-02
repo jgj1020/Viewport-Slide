@@ -1,11 +1,11 @@
 /* ==========================================
-   📌 1. 기본 리셋 및 글로벌 스타일
+    📌 1. 기본 리셋 및 글로벌 스타일
    ========================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-user-select: none; /* 드래그 제스처 시 텍스트 블록 잡힘 방지 */
+    -webkit-user-select: none; 
     user-select: none;
 }
 
@@ -14,11 +14,11 @@ body, html {
     height: 100%;
     overflow: hidden;
     font-family: 'Arial', sans-serif;
-    background: #0d0d13;
+    background: #050508;
 }
 
 /* ==========================================
-   ⏳ 2. 슬라이드 컨테이너 (스크롤 템포 및 스크롤바 숨김)
+    ⏳ 2. 슬라이드 컨테이너
    ========================================== */
 .slide-container {
     width: 100%;
@@ -26,26 +26,22 @@ body, html {
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
-    scroll-stop-preference: top; 
-
-    /* 🚫 우측 스크롤바 선 감추기 기능 (기능은 정상 작동) */
-    -ms-overflow-style: none; /* IE, Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
 }
 
-/* 크롬, 사파리, 오페라 브라우저 스크롤바 숨김 */
 .slide-container::-webkit-scrollbar {
     display: none;
 }
 
 /* ==========================================
-   🏢 3. 섹션 레이아웃 & 배경색
+    🏢 3. 섹션 레이아웃
    ========================================== */
 .v-slide {
     width: 100%;
     height: 100vh;
     scroll-snap-align: start;
-    scroll-snap-stop: always; /* 한 칸씩 딱딱 걸리도록 강제 */
+    scroll-snap-stop: always; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -57,14 +53,240 @@ body, html {
     overflow: hidden;
 }
 
-/* 고대비 힙한 배경 톤 */
-.section-1 { background: #0b0c10; }
-.section-2 { background: #1f2833; }
-.section-3 { background: #0b132b; }
-.section-4 { background: #09090b; }
+.section-1 { background: #07070a; }
+.section-2 { background: linear-gradient(180deg, #16167198 0%, #0e1118 100%); }
+.section-3 { background: #050b14; }
+.section-4 { background: #030305; }
 
 /* ==========================================
-   🌟 4. 요즘 세대 타이포그래피 & 안내 아이콘
+    🌀 4. SECTION-2 SKILLS: 광속 압축 및 튕김 애니메이션 마스터
+   ========================================== */
+.about-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 84vh;
+    position: relative;
+    padding: 10px 0;
+}
+
+.sub-guide-ts {
+    font-size: 0.9rem !important;
+    color: #4facfe !important;
+    opacity: 0.8;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+}
+
+/* 원형 레이아웃 판 바운더리 */
+.skills-circus-wrapper {
+    position: relative;
+    width: 380px;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+/* 가운데 토글 마스터 버튼 */
+.center-dial {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    background: rgba(13, 22, 42, 0.85);
+    border: 2px solid rgba(0, 242, 254, 0.3);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.15);
+}
+
+.dial-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.center-dial:hover .dial-glow {
+    opacity: 1;
+    box-shadow: 0 0 45px rgba(0, 242, 254, 0.7);
+}
+
+.center-dial:hover {
+    border-color: #00f2fe;
+    transform: scale(1.05);
+}
+
+.dial-core {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 900;
+    gap: 6px;
+}
+
+.dial-core span {
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+}
+
+.core-mode-icon {
+    font-size: 1.1rem;
+    color: #00f2fe;
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* 궤도 회전 컨테이너 */
+.skill-card-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: 20;
+}
+
+/* 🛸 [스킬 카드 기본 오픈 상태]: 사방으로 강력하고 탱글하게 튕겨나오는 특수 베지에 내장 */
+.skill-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 76px;
+    height: 76px;
+    background: rgba(18, 27, 49, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    cursor: pointer;
+    
+    transform: translate(-50%, -50%) 
+               rotate(calc(var(--item-index) * 90deg)) 
+               translateY(-135px) 
+               rotate(calc(var(--item-index) * -90deg));
+               
+    /* 튕김 효과(0.68, -0.55, 0.265, 1.55) 최적화 배치 */
+    transition: transform 0.75s cubic-bezier(0.68, -0.6, 0.32, 1.4), border-color 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.5s;
+    opacity: 1;
+}
+
+/* 🔒 [역동적 닫힘 모션 추가]: 그냥 들어가는 게 아니라 회전 회오리를 치며 중앙으로 초고속 압축 소멸 */
+.skills-circus-wrapper.collapsed .skill-card {
+    transform: translate(-50%, -50%) 
+               rotate(calc(var(--item-index) * 90deg + 540deg)) 
+               translateY(0px) 
+               rotate(calc(var(--item-index) * -90deg - 540deg)) 
+               scale(0.01);
+    opacity: 0;
+    pointer-events: none;
+    /* 닫힐 때는 브레이크가 걸리며 빨려 들어가는 긴박한 타임커브 적용 */
+    transition: transform 0.65s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.5s ease-in;
+}
+
+/* 활성화 네온 테두리 */
+.skill-card.active-focus {
+    border-color: #00f2fe;
+    background: rgba(0, 242, 254, 0.15);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.5), inset 0 0 10px rgba(0, 242, 254, 0.2);
+}
+
+.card-icon {
+    font-size: 2.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.txt-icon {
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+
+/* 📋 하단: 설명글 한줄 전용 디스플레이 */
+.skill-detail-display {
+    width: 100%;
+    max-width: 500px;
+    height: 54px;
+    background: rgba(9, 14, 26, 0.8);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    border-radius: 14px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    overflow: hidden;
+    z-index: 10;
+}
+
+.skill-detail-display.hidden-panel {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+/* 🎬 [요청 사항] 설명글이 아래서 위로 천천히 부드럽게 밀고 올라오는 컨테이너 */
+.display-text-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    opacity: 1;
+    transform: translateY(0);
+    /* 천천히 수직 스르륵 안착하도록 시간 0.75s 상향 */
+    transition: transform 0.75s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease;
+}
+
+/* 데이터를 바꿀 때 바닥에 미리 대기시킬 클래스 */
+.display-text-wrapper.sliding-down {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: none; 
+}
+
+.mini-badge {
+    background: #00f2fe;
+    color: #000;
+    font-size: 0.65rem;
+    font-weight: 900;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+#skill-description {
+    font-size: 0.88rem !important;
+    color: #cbd5e1 !important;
+    font-weight: 500;
+    margin-bottom: 0 !important;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+/* ==========================================
+    🌟 5. 타이포그래피 및 사이드 인디케이터
    ========================================== */
 .v-slide h1 {
     font-size: 4.5rem;
@@ -79,52 +301,14 @@ body, html {
 
 .v-slide p {
     font-size: 1.25rem;
-    color: #ffffff; /* 연보라색 포인트 */
+    color: #ffffff; 
     opacity: 0.9;
     font-weight: 500;
 }
 
-/* 폰 흔들기 아이콘 애니메이션 */
-.shake-icon {
-    display: inline-block;
-    font-size: 2.2rem;
-    margin-bottom: 12px;
-    color: #00f2fe;
-    animation: phoneShake 1s infinite ease-in-out;
-}
-
-@keyframes phoneShake {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(15deg) scale(1.1); }
-}
-
-/* 모바일 센서 활성화 버튼 */
-.sensor-activate-btn {
-    margin-top: 30px;
-    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-    color: black;
-    font-weight: bold;
-    border: none;
-    padding: 14px 28px;
-    font-size: 0.95rem;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0, 242, 254, 0.4);
-    transition: all 0.3s;
-}
-
-.sensor-activate-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 242, 254, 0.6);
-}
-
-/* ==========================================
-   💥 5. 통통 튀는 등장 애니메이션 (Cubic-Bezier)
-   ========================================== */
 .animate-target {
     opacity: 0;
     transform: translateY(60px) scale(0.85);
-    /* 쫀득하게 늘어났다가 제자리로 튕기며 찾아오는 가속도 공식 */
     transition: all 1s cubic-bezier(0.68, -0.6, 0.32, 1.6); 
     display: flex;
     flex-direction: column;
@@ -136,9 +320,6 @@ body, html {
     transform: translateY(0) scale(1);
 }
 
-/* ==========================================
-   📍 6. 우측 인디케이터 점(Dots)
-   ========================================== */
 .nav-dots {
     position: fixed;
     right: 30px;
@@ -166,11 +347,11 @@ body, html {
 }
 
 /* ==========================================
-   💳 7. 삼성 페이 스타일 명함 카드
+    💳 6. 명함 카드 사양
    ========================================== */
 .samsung-card {
     position: absolute;
-    bottom: -550px; /* 초기 상태: 화면 아래에 숨김 */
+    bottom: -550px; 
     width: 340px;
     height: 500px;
     background: linear-gradient(135deg, #181920 0%, #050508 100%);
@@ -182,14 +363,11 @@ body, html {
     justify-content: space-between;
     box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.8);
     z-index: 100;
-    cursor: grab;
-    /* 카드가 튀어 올라올 때 찰지게 튕기는 젤리 탄성 적용 */
     transition: bottom 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .samsung-card.open {
-    bottom: 50px; /* 활성화 시 올라오는 높이 */
-    cursor: grab;
+    bottom: 50px; 
     border-color: rgb(41, 145, 213);
     box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
 }
@@ -204,33 +382,15 @@ body, html {
 .card-info {
     text-align: left;
     margin-top: 15px;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.card-name {
-    font-size: 1.7rem;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    color: #fff;
-}
+.card-name { font-size: 1.7rem; font-weight: 800; color: #fff; }
+.card-id { font-size: 0.9rem; color: #666; margin-top: 4px; }
+.card-tel { font-size: 1.1rem; color: #ffffff; font-weight: bold; margin-top: 12px; }
 
-.card-id {
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 4px;
-}
-
-.card-tel {
-    font-size: 1.1rem;
-    color: #ffffff;
-    font-weight: bold;
-    margin-top: 12px;
-}
-
-/* 카드 하단 링크 단추들 */
 .card-footer-links {
     display: flex;
     flex-direction: column;
@@ -259,13 +419,6 @@ body, html {
     transform: translateX(6px);
 }
 
-.card-hint {
-    font-size: 0.75rem;
-    color: #444;
-    text-align: center;
-    margin-bottom: 5px;
-}
-
 .close-card-btn {
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -274,39 +427,51 @@ body, html {
     border-radius: 8px;
     cursor: pointer;
     font-size: 0.8rem;
-    transition: all 0.2s;
-}
-.close-card-btn:hover {
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* ==========================================
-   📱 8. 모바일 & 태블릿 최적화 반응형 레이아웃
+    📱 7. 모바일 미디어 쿼리 보정 파트
    ========================================== */
 @media screen and (max-width: 480px) {
-    .v-slide h1 {
-        font-size: 2.8rem;
-        margin-bottom: 20px;
-    }
-    
-    .v-slide p {
-        font-size: 1rem;
-        padding: 0 10px;
+    .v-slide h1 { font-size: 2.3rem; margin-bottom: 15px; }
+    .v-slide p { font-size: 0.95rem; }
+    .nav-dots { right: 12px; }
+
+    .skills-circus-wrapper {
+        width: 260px;
+        height: 260px;
     }
 
-    .nav-dots {
-        right: 15px;
-        gap: 12px;
+    .center-dial {
+        width: 85px;
+        height: 85px;
     }
 
-    /* 모바일 화면 크기에 맞춰 명함 카드 비율 슬림하게 조절 */
-    .samsung-card {
+    .dial-core { font-size: 0.75rem; }
+
+    .skill-card {
+        width: 58px;
+        height: 58px;
+        transform: translate(-50%, -50%) 
+                   rotate(calc(var(--item-index) * 90deg)) 
+                   translateY(-95px) 
+                   rotate(calc(var(--item-index) * -90deg));
+    }
+
+    .skills-circus-wrapper.collapsed .skill-card {
+        transform: translate(-50%, -50%) rotate(calc(var(--item-index) * 90deg + 540deg)) translateY(0px) rotate(calc(var(--item-index) * -90deg - 540deg)) scale(0.01);
+    }
+
+    .card-icon { font-size: 1.6rem; }
+    .txt-icon { font-size: 1.1rem; }
+
+    .skill-detail-display {
         width: 92%;
-        height: 480px;
+        height: 48px;
+        padding: 0 14px;
     }
-    
-    .samsung-card.open {
-        bottom: 20px;
+
+    #skill-description {
+        font-size: 0.78rem !important;
     }
 }

@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jang Gyeong Jun | Portfolio</title>
+    <title>Jang Kyung Jun | Portfolio</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <nav class="nav-dots">
-        <div class="dot active" onclick="scrollToSlide(0)"></div>
-        <div class="dot" onclick="scrollToSlide(1)"></div>
+        <div class="dot" onclick="scrollToSlide(0)"></div>
+        <div class="dot active" onclick="scrollToSlide(1)"></div>
         <div class="dot" onclick="scrollToSlide(2)"></div>
         <div class="dot" onclick="scrollToSlide(3)"></div>
     </nav>
@@ -20,15 +20,57 @@
         <section class="v-slide section-1">
             <div class="animate-target">
                 <h1>01. HELLO WORLD</h1>
-                <p>Front-End Developer 학생 개발자🐧🐧
-</p>
+                <p>Front-End Developer 학생 개발자🐧🐧</p>
             </div>
         </section>
         
-        <section class="v-slide section-2">
-            <div class="animate-target">
-                <h1>02. ABOUT</h1>
-                <p>스마트폰을 흔들면 특별한 명함이 나타나요.</p>
+        <section class="v-slide section-2" id="skills-section">
+            <div class="animate-target about-container">
+                
+                <div class="about-header">
+                    <h1>02. SKILLS</h1>
+                </div>
+
+                <div class="skills-circus-wrapper collapsed" id="circusWrapper">
+                    
+                    <div class="center-dial" onclick="toggleSystem()">
+                        <div class="dial-glow"></div>
+                        <div class="dial-core">
+                            <span id="active-skill-title">CORE</span>
+                            <i id="core-icon" class="fas fa-expand-arrows-alt core-mode-icon"></i>
+                        </div>
+                    </div>
+
+                    <div class="skill-card-container" id="skillContainer">
+                        <div class="skill-card" style="--item-index: 0;" onclick="selectSkill(0)" data-skill="React" data-desc="Component 기반 설계와 가상 돔을 활용한 고성능 웹 설계">
+                            <div class="card-glow"></div>
+                            <div class="card-icon"><i class="fab fa-react" style="color: #61DAFB;"></i></div>
+                        </div>
+                        
+                        <div class="skill-card" style="--item-index: 1;" onclick="selectSkill(1)" data-skill="TypeScript" data-desc="정적 타이핑을 통한 코드 안정성 확보 및 유지보수 최적화">
+                            <div class="card-glow"></div>
+                            <div class="card-icon"><span class="txt-icon" style="color: #3178C6;">TS</span></div>
+                        </div>
+                        
+                        <div class="skill-card" style="--item-index: 2;" onclick="selectSkill(2)" data-skill="Flutter" data-desc="크로스플랫폼 모바일 UI/UX 및 매끄러운 모션 프레임 구현">
+                            <div class="card-glow"></div>
+                            <div class="card-icon"><i class="fas fa-mobile-alt" style="color: #02569B;"></i></div>
+                        </div>
+                        
+                        <div class="skill-card" style="--item-index: 3;" onclick="selectSkill(3)" data-skill="HTML5" data-desc="웹 표준 시맨틱 마크업 준수 및 SEO 검색 엔진 최적화 구현">
+                            <div class="card-glow"></div>
+                            <div class="card-icon"><i class="fab fa-html5" style="color: #E34F26;"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-detail-display hidden-panel" id="detailPanel">
+                    <div class="display-text-wrapper" id="textMover">
+                        <span class="mini-badge">INFO</span>
+                        <p id="skill-description">기술 아이콘을 선택하면 상세 능력이 동기화됩니다.</p>
+                    </div>
+                </div>
+
             </div>
         </section>
         
@@ -41,9 +83,8 @@
         
         <section class="v-slide section-4" id="gesture-zone">
             <div class="animate-target">
-                <h1>04. CONTACT</h1>
+                <h1>04. 명함</h1>
                 <p class="guide-text"><i class="fas fa-mobile-alt shake-icon"></i> 폰을 흔들거나 위로 슬라이드 하세요!</p>
-                <button id="sensor-btn" class="sensor-activate-btn" onclick="requestSensorPermission()">모바일 센서 부스터 ON</button>
             </div>
 
             <div class="samsung-card" id="my-card">
