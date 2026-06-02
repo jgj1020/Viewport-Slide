@@ -59,7 +59,7 @@ body, html {
 .section-4 { background: #030305; }
 
 /* ==========================================
-    🌀 4. SECTION-2 SKILLS: 광속 압축 및 튕김 애니메이션 마스터
+    🌀 4. SECTION-2 SKILLS: 쇼케이스 디자인 마스터
    ========================================== */
 .about-container {
     display: flex;
@@ -160,7 +160,7 @@ body, html {
     z-index: 20;
 }
 
-/* 🛸 [스킬 카드 기본 오픈 상태]: 사방으로 강력하고 탱글하게 튕겨나오는 특수 베지에 내장 */
+/* 🛸 [스킬 카드 기본 오픈 상태] */
 .skill-card {
     position: absolute;
     top: 50%;
@@ -183,12 +183,11 @@ body, html {
                translateY(-135px) 
                rotate(calc(var(--item-index) * -90deg));
                
-    /* 튕김 효과(0.68, -0.55, 0.265, 1.55) 최적화 배치 */
     transition: transform 0.75s cubic-bezier(0.68, -0.6, 0.32, 1.4), border-color 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.5s;
     opacity: 1;
 }
 
-/* 🔒 [역동적 닫힘 모션 추가]: 그냥 들어가는 게 아니라 회전 회오리를 치며 중앙으로 초고속 압축 소멸 */
+/* 🔒 [역동적 닫힘 모션] */
 .skills-circus-wrapper.collapsed .skill-card {
     transform: translate(-50%, -50%) 
                rotate(calc(var(--item-index) * 90deg + 540deg)) 
@@ -197,7 +196,6 @@ body, html {
                scale(0.01);
     opacity: 0;
     pointer-events: none;
-    /* 닫힐 때는 브레이크가 걸리며 빨려 들어가는 긴박한 타임커브 적용 */
     transition: transform 0.65s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.5s ease-in;
 }
 
@@ -220,15 +218,16 @@ body, html {
     font-size: 1.5rem;
 }
 
-/* 📋 하단: 설명글 한줄 전용 디스플레이 */
+/* 📋 하단: 설명글 디스플레이 상자 (긴 글 대응 가변형 오버라이드 🛠️) */
 .skill-detail-display {
     width: 100%;
     max-width: 500px;
-    height: 54px;
+    min-height: 54px;
+    height: auto !important; /* 고정 크기 해제하여 자연스럽게 늘어나도록 변경 */
     background: rgba(9, 14, 26, 0.8);
     border: 1px solid rgba(0, 242, 254, 0.2);
     border-radius: 14px;
-    padding: 0 20px;
+    padding: 12px 20px; /* 위아래 패딩을 주어 글이 늘어나도 여백 유지 */
     display: flex;
     align-items: center;
     backdrop-filter: blur(15px);
@@ -244,19 +243,17 @@ body, html {
     pointer-events: none;
 }
 
-/* 🎬 [요청 사항] 설명글이 아래서 위로 천천히 부드럽게 밀고 올라오는 컨테이너 */
+/* 🎬 설명글 수직 안착 모션 컨테이너 */
 .display-text-wrapper {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* 글이 길어져 2줄이 될 때 배지와 정렬 맞춤 */
     gap: 12px;
     width: 100%;
     opacity: 1;
     transform: translateY(0);
-    /* 천천히 수직 스르륵 안착하도록 시간 0.75s 상향 */
     transition: transform 0.75s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease;
 }
 
-/* 데이터를 바꿀 때 바닥에 미리 대기시킬 클래스 */
 .display-text-wrapper.sliding-down {
     opacity: 0;
     transform: translateY(28px);
@@ -271,17 +268,22 @@ body, html {
     padding: 2px 6px;
     border-radius: 4px;
     flex-shrink: 0;
+    margin-top: 2px; /* 텍스트 시작 라인과 균형 맞춤 */
 }
 
+/* 🛠️ [버그 해결] 말줄임표 해제 및 본문 자동 개행 처리 */
 #skill-description {
     font-size: 0.88rem !important;
     color: #cbd5e1 !important;
     font-weight: 500;
     margin-bottom: 0 !important;
     text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    
+    white-space: normal !important;      /* nowrap 해제하여 강제 한 줄 차단 */
+    overflow: visible !important;        /* 숨김 속성 제거 */
+    text-overflow: clip !important;      /* ellipsis(...) 속성 완벽 제거 */
+    word-break: keep-all !important;     /* 한글 단어가 중간에 쪼개지지 않게 정렬 */
+    line-height: 1.5 !important;         /* 가독성을 위한 줄간격 최적화 */
     width: 100%;
 }
 
@@ -465,13 +467,16 @@ body, html {
     .card-icon { font-size: 1.6rem; }
     .txt-icon { font-size: 1.1rem; }
 
+    /* 모바일 반응형 상태에서도 텍스트가 안 잘리고 유연하게 늘어나도록 보정 */
     .skill-detail-display {
         width: 92%;
-        height: 48px;
-        padding: 0 14px;
+        height: auto !important;
+        min-height: 48px;
+        padding: 10px 14px;
     }
 
     #skill-description {
         font-size: 0.78rem !important;
+        line-height: 1.4 !important;
     }
 }

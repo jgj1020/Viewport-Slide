@@ -5,7 +5,7 @@ const card = document.getElementById('my-card');
 const gestureZone = document.getElementById('gesture-zone');
 
 // ==========================================
-// 🌀 0. SECTION-2 SKILLS: 쇼케이스 제어부
+// 🌀 0. SECTION-2 SKILLS: 쇼케이스 제어부 (자동 열림 버그 완전 박멸)
 // ==========================================
 let isSystemExpanded = false; 
 let currentTargetAngle = 0;   
@@ -17,8 +17,8 @@ function toggleSystem() {
     
     if (!isSystemExpanded) {
         isSystemExpanded = true;
-        circusWrapper.classList.remove('collapsed');
-        detailPanel.classList.remove('hidden-panel');
+        if(circusWrapper) circusWrapper.classList.remove('collapsed');
+        if(detailPanel) detailPanel.classList.remove('hidden-panel');
         selectSkill(0); 
     } else {
         forceCollapseSystem();
@@ -29,15 +29,12 @@ function forceCollapseSystem() {
     const circusWrapper = document.getElementById('circusWrapper');
     const detailPanel = document.getElementById('detailPanel');
     
-    if (!circusWrapper) return;
     isSystemExpanded = false;
-    circusWrapper.classList.add('collapsed'); 
-    detailPanel.classList.add('hidden-panel'); 
+    if (circusWrapper) circusWrapper.classList.add('collapsed'); 
+    if (detailPanel) detailPanel.classList.add('hidden-panel'); 
 }
 
 function selectSkill(targetIndex) {
-    if (!isSystemExpanded) return; 
-
     const currentActiveIndex = ((currentTargetAngle / -90) % totalSkills + totalSkills) % totalSkills;
     let diff = targetIndex - currentActiveIndex;
     
@@ -49,7 +46,9 @@ function selectSkill(targetIndex) {
     const skillContainer = document.getElementById('skillContainer');
     const skillCards = document.querySelectorAll('.skill-card');
     
-    skillContainer.style.transform = `rotate(${currentTargetAngle}deg)`;
+    if (skillContainer) {
+        skillContainer.style.transform = `rotate(${currentTargetAngle}deg)`;
+    }
     
     skillCards.forEach((cardItem) => {
         const index = cardItem.style.getPropertyValue('--item-index');
@@ -71,14 +70,35 @@ function syncDetailPanel(index) {
         const skillName = targetCard.getAttribute('data-skill');
         const skillDesc = targetCard.getAttribute('data-desc');
 
-        document.getElementById('active-skill-title').innerText = skillName;
-        document.getElementById('skill-description').innerText = skillDesc;
+        const titleEl = document.getElementById('active-skill-title');
+        const descEl = document.getElementById('skill-description');
+        if (titleEl) titleEl.innerText = skillName;
+        if (descEl) descEl.innerText = skillDesc;
     }
 }
 
 // ==========================================
-// 📌 1. 풀페이지 스크롤 제어부
+// 📌 1. 풀페이지 스크롤 제어부 (강제 자동 활성화 코드 삭제)
 // ==========================================
+function updateNavigation(currentIndex) {
+    slides.forEach((slide, index) => {
+        if (index === currentIndex) {
+            slide.classList.add('active');
+            if (dots[index]) dots[index].classList.add('active');
+            // 💡 [수정] index === 1 일 때 자동으로 toggleSystem()을 호출하던 버그 코드를 완전히 제거했습니다.
+        } else {
+            slide.classList.remove('active');
+            if (dots[index]) dots[index].classList.remove('active');
+            
+            // 2번째 페이지를 '완전히 벗어날 때만' 안전하게 닫아줍니다.
+            if (index === 1 && isSystemExpanded && currentIndex !== 1) {
+                forceCollapseSystem();
+            }
+            if (index === 3) toggleCard(false);
+        }
+    });
+}
+
 function scrollToSlide(index) {
     const slideHeight = window.innerHeight;
     container.scrollTo({ top: slideHeight * index, behavior: 'smooth' });
@@ -88,29 +108,24 @@ container.addEventListener('scroll', () => {
     const slideHeight = window.innerHeight;
     const scrollTop = container.scrollTop;
     const currentIndex = Math.round(scrollTop / slideHeight);
-    
-    slides.forEach((slide, index) => {
-        if (index === currentIndex) {
-            slide.classList.add('active');
-            dots[index].classList.add('active');
-        } else {
-            slide.classList.remove('active');
-            dots[index].classList.remove('active');
-            
-            if (index === 1 && isSystemExpanded) {
-                forceCollapseSystem();
-            }
-            if (index === 3) toggleCard(false);
-        }
-    });
+    updateNavigation(currentIndex);
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-    slides[0].classList.add('active');
+    container.scrollTop = 0;
+    updateNavigation(0);
+    
+    // 첫 로드 시 스킬창은 철저하게 닫힌 상태(collapsed)로 대기합니다.
+    const circusWrapper = document.getElementById('circusWrapper');
+    if (circusWrapper) circusWrapper.classList.add('collapsed');
+    isSystemExpanded = false;
+
+    initIdleVibration();
+    autoInitSensor(); 
 });
 
 // ==========================================
-// 💳 2. 명함 인터랙션 & 리얼 핸드폰 가속도 물리 엔진
+// 💳 2. 명함 인터랙션 & 리얼 가속도 모션 엔진
 // ==========================================
 function toggleCard(select) {
     if (select) {
@@ -122,7 +137,6 @@ function toggleCard(select) {
     }
 }
 
-// 터치 드래그 메커니즘
 let startY = 0; let isDragging = false;
 function handleStart(e) { isDragging = true; startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY; }
 function handleMove(e) {
@@ -134,27 +148,49 @@ function handleMove(e) {
     if (diffY < -50 && card.classList.contains('open')) { toggleCard(false); isDragging = false; }
 }
 
-gestureZone.addEventListener('touchstart', handleStart, { passive: true });
-gestureZone.addEventListener('touchmove', handleMove, { passive: false }); 
-gestureZone.addEventListener('touchend', () => isDragging = false);
-gestureZone.addEventListener('mousedown', handleStart);
-gestureZone.addEventListener('mousemove', handleMove);
+if (gestureZone) {
+    gestureZone.addEventListener('touchstart', handleStart, { passive: true });
+    gestureZone.addEventListener('touchmove', handleMove, { passive: false }); 
+    gestureZone.addEventListener('touchend', () => isDragging = false);
+    gestureZone.addEventListener('mousedown', handleStart);
+    gestureZone.addEventListener('mousemove', handleMove);
+}
 window.addEventListener('mouseup', () => isDragging = false);
 
+// 📱 상시 째깍째깍 대기 흔들기 효과
+let idleAngle = 0;
+let idleDirection = 1;
+let sensorActive = false; 
 
-// 📱 [핵심 고도화] 물리 센서 작동 및 권한 획득 처리 엔진
+function initIdleVibration() {
+    setInterval(() => {
+        if (sensorActive) return; 
+        
+        const phoneIcon = document.querySelector('.shake-icon') || (gestureZone && gestureZone.querySelector('i'));
+        if (!phoneIcon) return;
+        
+        idleAngle += 1.2 * idleDirection;
+        if (idleAngle > 12 || idleAngle < -12) {
+            idleDirection *= -1; 
+        }
+        phoneIcon.style.transition = 'transform 0.08s ease-in-out';
+        phoneIcon.style.transform = `rotate(${idleAngle}deg) scale(1.08)`;
+    }, 60);
+}
+
+// 리얼 하드웨어 모션 센서 연동 가동부
 let lastX = null, lastY = null, lastZ = null, lastUpdate = 0;
-let isSensorAttached = false; // 중복 등록 방지 가드
+let isSensorAttached = false; 
 
 function deviceMotionHandler(event) {
     const acceleration = event.accelerationIncludingGravity;
     if (!acceleration) return;
 
-    // 스크린샷 속 핸드폰 아이콘 클래스(.shake-icon) 혹은 i 태그 자동 매칭
-    const phoneIcon = document.querySelector('.shake-icon') || gestureZone.querySelector('i');
-
+    sensorActive = true; 
+    const phoneIcon = document.querySelector('.shake-icon') || (gestureZone && gestureZone.querySelector('i'));
     const curTime = new Date().getTime();
-    if ((curTime - lastUpdate) > 30) { // 반응 속도를 더 빠르게 (30ms)
+
+    if ((curTime - lastUpdate) > 30) { 
         const diffTime = curTime - lastUpdate; 
         lastUpdate = curTime;
 
@@ -162,59 +198,50 @@ function deviceMotionHandler(event) {
         const y = acceleration.y; 
         const z = acceleration.z;
 
-        // 1. 손 기울기에 따라 핸드폰 이모지 실시간 꺾임 연동
         if (phoneIcon && x !== null) {
-            let tiltAngle = x * -4.0; // 기울기 감도 살짝 상향
+            let tiltAngle = x * -4.0; 
             if (tiltAngle > 40) tiltAngle = 40;
             if (tiltAngle < -40) tiltAngle = -40;
             
-            phoneIcon.style.transition = 'transform 0.05s ease-out'; // 극도로 부드럽고 민첩하게 반응
+            phoneIcon.style.transition = 'transform 0.05s ease-out'; 
             phoneIcon.style.transform = `rotate(${tiltAngle}deg) scale(1.15)`;
         }
 
-        // 2. 폰을 휙 흔들었을 때 명함 카드 오픈 트리거
         if (lastX !== null) {
             const speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
-            
-            // 흔들림 감지 민감도 최적화 (800)
             if (speed > 800 && !card.classList.contains('open')) { 
                 toggleCard(true);
-                if (navigator.vibrate) navigator.vibrate(150); // 흔들렸을 때 징~ 진동 피드백
+                if (navigator.vibrate) navigator.vibrate(150); 
             }
         }
         lastX = x; lastY = y; lastZ = z;
     }
 }
 
-// 🔐 [안내] iOS 및 최신 브라우저는 반드시 '사용자의 직접적인 터치'가 있어야만 센서를 켤 수 있습니다.
 function activateSensor() {
-    if (isSensorAttached) return; // 이미 켜져 있다면 중복 작동 방지
+    if (isSensorAttached) return; 
 
-    // 1. iOS 사파리 규격 대응
     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
         DeviceMotionEvent.requestPermission()
             .then(state => { 
                 if (state === 'granted') {
                     window.addEventListener('devicemotion', deviceMotionHandler, true);
                     isSensorAttached = true;
-                } else {
-                    alert('센서 권한이 거부되었습니다. 설정에서 모션 인식을 허용해 주세요!');
                 }
-            })
-            .catch(err => {
-                console.error("iOS Sensor Error: ", err);
-            });
-    } 
-    // 2. 안드로이드 크롬 및 일반 모바일 브라우저 규격 대응
-    else if (typeof DeviceMotionEvent !== 'undefined') {
+            }).catch(console.error);
+    } else if (typeof DeviceMotionEvent !== 'undefined') {
         window.addEventListener('devicemotion', deviceMotionHandler, true);
         isSensorAttached = true;
-    } else {
-        alert('이 기기는 자이로 가속도 센서를 지원하지 않습니다.');
     }
 }
 
-// 04번 명함 스크린의 전체 구역에 '터치하면 센서가 깨어나도록' 완벽 결합
+function autoInitSensor() {
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission !== 'function') {
+        window.addEventListener('devicemotion', deviceMotionHandler, true);
+        isSensorAttached = true;
+    }
+}
+
 if (gestureZone) {
     gestureZone.addEventListener('click', activateSensor);
     gestureZone.addEventListener('touchstart', activateSensor);
