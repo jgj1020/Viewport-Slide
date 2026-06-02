@@ -3,55 +3,38 @@ const slides = document.querySelectorAll('.v-slide');
 const dots = document.querySelectorAll('.dot');
 const card = document.getElementById('my-card');
 const gestureZone = document.getElementById('gesture-zone');
-const sensorBtn = document.getElementById('sensor-btn');
 
 // ==========================================
-// 🌀 0. SECTION-2 SKILLS: 역동적 닫힘 및 자동 셧다운 기능 엔진
+// 🌀 0. SECTION-2 SKILLS: 쇼케이스 제어부
 // ==========================================
 let isSystemExpanded = false; 
 let currentTargetAngle = 0;   
 const totalSkills = 4;
 
-// 🕹️ 1) 가운데 버튼 코어 클릭: 접고 펼치는 토글 기능 (트랜스포머 닫힘 트리거 포함)
 function toggleSystem() {
     const circusWrapper = document.getElementById('circusWrapper');
     const detailPanel = document.getElementById('detailPanel');
-    const coreIcon = document.getElementById('core-icon');
     
     if (!isSystemExpanded) {
-        // 시스템 대전개 (오픈)
         isSystemExpanded = true;
         circusWrapper.classList.remove('collapsed');
         detailPanel.classList.remove('hidden-panel');
-        coreIcon.className = "fas fa-compress-arrows-alt core-mode-icon"; 
-        coreIcon.style.transform = "rotate(-180deg)"; // 아이콘 역회전 리액션
-        
-        syncDetailPanel(0); // 최초 12시 랭귀지 동기화
+        selectSkill(0); 
     } else {
-        // 시스템 강제 셧다운 (닫기 메커니즘 가동)
         forceCollapseSystem();
     }
 }
 
-// 🔒 [강력 셧다운 캡슐화]: 외부 스크롤 이탈 시에도 이 함수가 호출되어 완벽히 잠깁니다.
 function forceCollapseSystem() {
     const circusWrapper = document.getElementById('circusWrapper');
     const detailPanel = document.getElementById('detailPanel');
-    const coreIcon = document.getElementById('core-icon');
     
     if (!circusWrapper) return;
-    
     isSystemExpanded = false;
-    circusWrapper.classList.add('collapsed'); // CSS상의 540도 블랙홀 회전 닫힘 모션 발동
-    detailPanel.classList.add('hidden-panel'); // 하단 텍스트 스르륵 아웃
-    
-    if(coreIcon) {
-        coreIcon.className = "fas fa-expand-arrows-alt core-mode-icon";
-        coreIcon.style.transform = "rotate(0deg)";
-    }
+    circusWrapper.classList.add('collapsed'); 
+    detailPanel.classList.add('hidden-panel'); 
 }
 
-// 🕹️ 2) 주변 기술 아이콘 클릭: 정면 회전 연산 시스템
 function selectSkill(targetIndex) {
     if (!isSystemExpanded) return; 
 
@@ -70,42 +53,31 @@ function selectSkill(targetIndex) {
     
     skillCards.forEach((cardItem) => {
         const index = cardItem.style.getPropertyValue('--item-index');
-        const radius = window.innerWidth <= 480 ? '-95px' : '-135px';
+        const radius = window.innerWidth <= 480 ? '-100px' : '-130px';
         cardItem.style.transform = `translate(-50%, -50%) rotate(calc(${index} * 90deg)) translateY(${radius}) rotate(calc(${index} * -90deg - ${currentTargetAngle}deg))`;
     });
 
     syncDetailPanel(targetIndex);
 }
 
-// 📋 [천천히 아래서 위로 무빙 업 설명창 모션 가속기]
 function syncDetailPanel(index) {
     const skillCards = document.querySelectorAll('.skill-card');
     const targetCard = document.querySelector(`.skill-card[style*="--item-index: ${index}"]`);
-    const textMover = document.getElementById('textMover');
     
-    if (targetCard && textMover) {
+    if (targetCard) {
         skillCards.forEach(c => c.classList.remove('active-focus'));
         targetCard.classList.add('active-focus');
 
         const skillName = targetCard.getAttribute('data-skill');
         const skillDesc = targetCard.getAttribute('data-desc');
 
-        // 먼저 바닥 아래로 순간이동시켜 눈에 숨기기
-        textMover.classList.add('sliding-down');
-
-        // 아주 미세한 브라우저 프레임 틱 연산 간격 부여 후, 천천히 슬라이드 업 로딩 시작
-        setTimeout(() => {
-            document.getElementById('active-skill-title').innerText = skillName;
-            document.getElementById('skill-description').innerText = skillDesc;
-            
-            textMover.classList.remove('sliding-down'); // 위로 천천히 부드럽게 상승 가동
-        }, 100); 
+        document.getElementById('active-skill-title').innerText = skillName;
+        document.getElementById('skill-description').innerText = skillDesc;
     }
 }
 
-
 // ==========================================
-// 📌 1. 우측 점(Dot) 제어 및 [핵심] 스크롤 섹션 변경 시 자동 닫힘 감지기
+// 📌 1. 풀페이지 스크롤 제어부
 // ==========================================
 function scrollToSlide(index) {
     const slideHeight = window.innerHeight;
@@ -125,11 +97,9 @@ container.addEventListener('scroll', () => {
             slide.classList.remove('active');
             dots[index].classList.remove('active');
             
-            // 💡 [요청 사항 반영] 현재 인덱스가 SKILLS 섹션(1번)이 아니라면 무조건 자동 닫힘 작동!
             if (index === 1 && isSystemExpanded) {
                 forceCollapseSystem();
             }
-            
             if (index === 3) toggleCard(false);
         }
     });
@@ -140,18 +110,19 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // ==========================================
-// 💳 2. 명함 센서 인터랙션 사양
+// 💳 2. 명함 인터랙션 & 리얼 핸드폰 가속도 물리 엔진
 // ==========================================
 function toggleCard(select) {
     if (select) {
         card.classList.add('open');
-        container.style.overflowY = 'hidden';
+        container.style.overflowY = 'hidden'; 
     } else {
         card.classList.remove('open');
         container.style.overflowY = 'scroll';
     }
 }
 
+// 터치 드래그 메커니즘
 let startY = 0; let isDragging = false;
 function handleStart(e) { isDragging = true; startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY; }
 function handleMove(e) {
@@ -159,8 +130,8 @@ function handleMove(e) {
     const currentY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
     const diffY = startY - currentY;
     if (card.classList.contains('open') && diffY < 0 && e.cancelable) e.preventDefault(); 
-    if (diffY > 60 && !card.classList.contains('open')) { toggleCard(true); isDragging = false; }
-    if (diffY < -60 && card.classList.contains('open')) { toggleCard(false); isDragging = false; }
+    if (diffY > 50 && !card.classList.contains('open')) { toggleCard(true); isDragging = false; }
+    if (diffY < -50 && card.classList.contains('open')) { toggleCard(false); isDragging = false; }
 }
 
 gestureZone.addEventListener('touchstart', handleStart, { passive: true });
@@ -170,23 +141,81 @@ gestureZone.addEventListener('mousedown', handleStart);
 gestureZone.addEventListener('mousemove', handleMove);
 window.addEventListener('mouseup', () => isDragging = false);
 
+
+// 📱 [핵심 고도화] 물리 센서 작동 및 권한 획득 처리 엔진
 let lastX = null, lastY = null, lastZ = null, lastUpdate = 0;
+let isSensorAttached = false; // 중복 등록 방지 가드
+
 function deviceMotionHandler(event) {
     const acceleration = event.accelerationIncludingGravity;
+    if (!acceleration) return;
+
+    // 스크린샷 속 핸드폰 아이콘 클래스(.shake-icon) 혹은 i 태그 자동 매칭
+    const phoneIcon = document.querySelector('.shake-icon') || gestureZone.querySelector('i');
+
     const curTime = new Date().getTime();
-    if ((curTime - lastUpdate) > 100) {
-        const diffTime = curTime - lastUpdate; lastUpdate = curTime;
-        const x = acceleration.x; const y = acceleration.y; const z = acceleration.z;
+    if ((curTime - lastUpdate) > 30) { // 반응 속도를 더 빠르게 (30ms)
+        const diffTime = curTime - lastUpdate; 
+        lastUpdate = curTime;
+
+        const x = acceleration.x; 
+        const y = acceleration.y; 
+        const z = acceleration.z;
+
+        // 1. 손 기울기에 따라 핸드폰 이모지 실시간 꺾임 연동
+        if (phoneIcon && x !== null) {
+            let tiltAngle = x * -4.0; // 기울기 감도 살짝 상향
+            if (tiltAngle > 40) tiltAngle = 40;
+            if (tiltAngle < -40) tiltAngle = -40;
+            
+            phoneIcon.style.transition = 'transform 0.05s ease-out'; // 극도로 부드럽고 민첩하게 반응
+            phoneIcon.style.transform = `rotate(${tiltAngle}deg) scale(1.15)`;
+        }
+
+        // 2. 폰을 휙 흔들었을 때 명함 카드 오픈 트리거
         if (lastX !== null) {
             const speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
-            if (speed > 800 && !card.classList.contains('open')) { toggleCard(true); if (navigator.vibrate) navigator.vibrate(200); }
+            
+            // 흔들림 감지 민감도 최적화 (800)
+            if (speed > 800 && !card.classList.contains('open')) { 
+                toggleCard(true);
+                if (navigator.vibrate) navigator.vibrate(150); // 흔들렸을 때 징~ 진동 피드백
+            }
         }
         lastX = x; lastY = y; lastZ = z;
     }
 }
-function initShakeSensor() { window.addEventListener('devicemotion', deviceMotionHandler, true); }
-function requestSensorPermission() {
+
+// 🔐 [안내] iOS 및 최신 브라우저는 반드시 '사용자의 직접적인 터치'가 있어야만 센서를 켤 수 있습니다.
+function activateSensor() {
+    if (isSensorAttached) return; // 이미 켜져 있다면 중복 작동 방지
+
+    // 1. iOS 사파리 규격 대응
     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission().then(state => { if (state === 'granted') initShakeSensor(); }).catch(console.error);
-    } else { initShakeSensor(); }
+        DeviceMotionEvent.requestPermission()
+            .then(state => { 
+                if (state === 'granted') {
+                    window.addEventListener('devicemotion', deviceMotionHandler, true);
+                    isSensorAttached = true;
+                } else {
+                    alert('센서 권한이 거부되었습니다. 설정에서 모션 인식을 허용해 주세요!');
+                }
+            })
+            .catch(err => {
+                console.error("iOS Sensor Error: ", err);
+            });
+    } 
+    // 2. 안드로이드 크롬 및 일반 모바일 브라우저 규격 대응
+    else if (typeof DeviceMotionEvent !== 'undefined') {
+        window.addEventListener('devicemotion', deviceMotionHandler, true);
+        isSensorAttached = true;
+    } else {
+        alert('이 기기는 자이로 가속도 센서를 지원하지 않습니다.');
+    }
+}
+
+// 04번 명함 스크린의 전체 구역에 '터치하면 센서가 깨어나도록' 완벽 결합
+if (gestureZone) {
+    gestureZone.addEventListener('click', activateSensor);
+    gestureZone.addEventListener('touchstart', activateSensor);
 }
