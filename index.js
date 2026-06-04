@@ -52,7 +52,7 @@ function selectSkill(targetIndex) {
     
     skillCards.forEach((cardItem) => {
         const index = cardItem.style.getPropertyValue('--item-index');
-        const radius = window.innerWidth <= 480 ? '-100px' : '-130px';
+        const radius = window.innerWidth <= 480 ? '-95px' : '-135px';
         cardItem.style.transform = `translate(-50%, -50%) rotate(calc(${index} * 90deg)) translateY(${radius}) rotate(calc(${index} * -90deg - ${currentTargetAngle}deg))`;
     });
 
@@ -78,23 +78,25 @@ function syncDetailPanel(index) {
 }
 
 // ==========================================
-// 📌 1. 풀페이지 스크롤 제어부 (강제 자동 활성화 코드 삭제)
+// 📌 1. 풀페이지 스크롤 제어부 (3번 프로젝트 페이지 안전 대응)
 // ==========================================
 function updateNavigation(currentIndex) {
     slides.forEach((slide, index) => {
         if (index === currentIndex) {
             slide.classList.add('active');
             if (dots[index]) dots[index].classList.add('active');
-            // 💡 [수정] index === 1 일 때 자동으로 toggleSystem()을 호출하던 버그 코드를 완전히 제거했습니다.
         } else {
             slide.classList.remove('active');
             if (dots[index]) dots[index].classList.remove('active');
             
-            // 2번째 페이지를 '완전히 벗어날 때만' 안전하게 닫아줍니다.
+            // 2번째 페이지(Skills)를 완전히 벗어날 때만 사이드 시스템을 원격으로 안전히 닫아줍니다.
             if (index === 1 && isSystemExpanded && currentIndex !== 1) {
                 forceCollapseSystem();
             }
-            if (index === 3) toggleCard(false);
+            // 4번째 페이지(명함)를 탈출하면 올라왔던 카드를 즉시 아래로 숨깁니다.
+            if (index === 3 && currentIndex !== 3) {
+                toggleCard(false);
+            }
         }
     });
 }
@@ -124,6 +126,17 @@ window.addEventListener('DOMContentLoaded', () => {
     autoInitSensor(); 
 });
 
+// 화면 크기가 변할 때 원형 레이아웃 반지름을 실시간 방어 보정해줍니다.
+window.addEventListener('resize', () => {
+    if (isSystemExpanded) {
+        const activeCard = document.querySelector('.skill-card.active-focus');
+        if (activeCard) {
+            const index = parseInt(activeCard.style.getPropertyValue('--item-index'), 10);
+            selectSkill(isNaN(index) ? 0 : index);
+        }
+    }
+});
+
 // ==========================================
 // 💳 2. 명함 인터랙션 & 리얼 가속도 모션 엔진
 // ==========================================
@@ -138,11 +151,16 @@ function toggleCard(select) {
 }
 
 let startY = 0; let isDragging = false;
-function handleStart(e) { isDragging = true; startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY; }
+function handleStart(e) { 
+    isDragging = true; 
+    startY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY; 
+}
+
 function handleMove(e) {
     if (!isDragging) return;
     const currentY = e.type.includes('mouse') ? e.pageY : e.touches[0].pageY;
     const diffY = startY - currentY;
+    
     if (card.classList.contains('open') && diffY < 0 && e.cancelable) e.preventDefault(); 
     if (diffY > 50 && !card.classList.contains('open')) { toggleCard(true); isDragging = false; }
     if (diffY < -50 && card.classList.contains('open')) { toggleCard(false); isDragging = false; }

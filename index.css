@@ -218,16 +218,16 @@ body, html {
     font-size: 1.5rem;
 }
 
-/* 📋 하단: 설명글 디스플레이 상자 (긴 글 대응 가변형 오버라이드 🛠️) */
+/* 📋 하단: 설명글 디스플레이 상자 */
 .skill-detail-display {
     width: 100%;
     max-width: 500px;
     min-height: 54px;
-    height: auto !important; /* 고정 크기 해제하여 자연스럽게 늘어나도록 변경 */
+    height: auto !important; 
     background: rgba(9, 14, 26, 0.8);
     border: 1px solid rgba(0, 242, 254, 0.2);
     border-radius: 14px;
-    padding: 12px 20px; /* 위아래 패딩을 주어 글이 늘어나도 여백 유지 */
+    padding: 12px 20px; 
     display: flex;
     align-items: center;
     backdrop-filter: blur(15px);
@@ -243,10 +243,10 @@ body, html {
     pointer-events: none;
 }
 
-/* 🎬 설명글 수직 안착 모션 컨테이너 */
+/* 설명글 수직 안착 모션 컨테이너 */
 .display-text-wrapper {
     display: flex;
-    align-items: flex-start; /* 글이 길어져 2줄이 될 때 배지와 정렬 맞춤 */
+    align-items: flex-start; 
     gap: 12px;
     width: 100%;
     opacity: 1;
@@ -268,22 +268,20 @@ body, html {
     padding: 2px 6px;
     border-radius: 4px;
     flex-shrink: 0;
-    margin-top: 2px; /* 텍스트 시작 라인과 균형 맞춤 */
+    margin-top: 2px; 
 }
 
-/* 🛠️ [버그 해결] 말줄임표 해제 및 본문 자동 개행 처리 */
 #skill-description {
     font-size: 0.88rem !important;
     color: #cbd5e1 !important;
     font-weight: 500;
     margin-bottom: 0 !important;
     text-align: left;
-    
-    white-space: normal !important;      /* nowrap 해제하여 강제 한 줄 차단 */
-    overflow: visible !important;        /* 숨김 속성 제거 */
-    text-overflow: clip !important;      /* ellipsis(...) 속성 완벽 제거 */
-    word-break: keep-all !important;     /* 한글 단어가 중간에 쪼개지지 않게 정렬 */
-    line-height: 1.5 !important;         /* 가독성을 위한 줄간격 최적화 */
+    white-space: normal !important;      
+    overflow: visible !important;        
+    text-overflow: clip !important;      
+    word-break: keep-all !important;     
+    line-height: 1.5 !important;         
     width: 100%;
 }
 
@@ -346,6 +344,151 @@ body, html {
     background-color: #ffffff;
     transform: scale(1.6);
     box-shadow: 0 0 10px #00f2fe;
+}
+
+/* ==========================================
+    🚀 5-2. NEW SECTION-3 PROJECTS: 프로젝트 쇼케이스 그리드
+   ========================================== */
+.project-main-title {
+    margin-bottom: 8px !important;
+}
+
+.project-sub-title {
+    font-size: 1rem !important;
+    color: #4facfe !important;
+    opacity: 0.85;
+    margin-bottom: 35px;
+}
+
+/* 카드들을 배치하는 그리드 컨테이너 */
+.project-grid-container {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1100px;
+    padding: 0 20px;
+}
+
+/* 글래스모피즘 입체 카드 사양 */
+.project-glass-card {
+    width: 310px;
+    background: rgba(18, 27, 49, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    text-align: left;
+}
+
+.project-glass-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(0, 242, 254, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 242, 254, 0.15);
+}
+
+.project-thumb-wrapper {
+    width: 100%;
+    height: 150px;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-thumb {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.project-glass-card:hover .project-thumb {
+    transform: scale(1.05);
+}
+
+/* 웹/앱 배지 */
+.platform-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(5, 5, 8, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #00f2fe;
+    font-size: 0.68rem;
+    font-weight: 900;
+    padding: 4px 8px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+/* 메타 텍스트 설명 정보 */
+.project-meta-info {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.project-meta-info h3 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fff;
+    text-align: left;
+}
+
+.project-meta-info p {
+    font-size: 0.85rem !important;
+    color: #94a3b8;
+    line-height: 1.4;
+    text-align: left;
+    opacity: 1 !important;
+}
+
+/* 기술 스택 배지 라인 */
+.project-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+}
+
+.project-tech-tags span {
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* 🚀 네온 실행 버튼 */
+.run-project-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 11px 0;
+    background: rgba(0, 242, 254, 0.06);
+    border: 1px solid rgba(0, 242, 254, 0.2);
+    color: #00f2fe;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.run-project-btn:hover {
+    background: #00f2fe;
+    color: #000;
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
 }
 
 /* ==========================================
@@ -467,7 +610,6 @@ body, html {
     .card-icon { font-size: 1.6rem; }
     .txt-icon { font-size: 1.1rem; }
 
-    /* 모바일 반응형 상태에서도 텍스트가 안 잘리고 유연하게 늘어나도록 보정 */
     .skill-detail-display {
         width: 92%;
         height: auto !important;
@@ -478,5 +620,26 @@ body, html {
     #skill-description {
         font-size: 0.78rem !important;
         line-height: 1.4 !important;
+    }
+
+    /* 📌 프로젝트 쇼케이스 모바일 반응형 처리 */
+    .project-grid-container {
+        flex-direction: column;
+        gap: 15px;
+        padding: 0 15px;
+    }
+    .project-sub-title {
+        margin-bottom: 20px;
+        font-size: 0.85rem !important;
+    }
+    .project-glass-card {
+        width: 100%;
+        max-width: 330px;
+    }
+    .project-thumb-wrapper {
+        height: 110px;
+    }
+    .project-meta-info {
+        padding: 15px;
     }
 }
