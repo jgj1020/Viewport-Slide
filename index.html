@@ -6,6 +6,26 @@
     <title>Jang Kyung Jun | Portfolio</title>
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 이미지가 카드의 둥근 테두리를 벗어나지 않고 비율을 유지하도록 추가하는 스타일 */
+        .project-glass-card {
+            overflow: hidden; /* 카드 모서리에 맞춰 이미지도 함께 깎이도록 설정 */
+        }
+        .project-thumb {
+            position: relative;
+            padding: 0 !important; /* 이미지 공간 확보 */
+        }
+        .project-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 이미지가 찌그러지지 않게 꽉 채움 */
+            object-position: top; /* 상단 위주로 노출 */
+            display: block;
+        }
+        .platform-badge {
+            z-index: 10; /* 이미지가 badge를 가리지 않도록 레이어 순위 조정 */
+        }
+    </style>
 </head>
 <body>
 
@@ -81,17 +101,18 @@
                     
                     <div class="project-glass-card">
                         <div class="project-thumb-wrapper">
-                            <div class="project-thumb" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <div class="project-thumb">
+                                <img src="img/my-project-1.png" alt="인터랙션 포트폴리오 V1 캡처 화면">
                                 <span class="platform-badge">WEB</span>
                             </div>
                         </div>
                         <div class="project-meta-info">
-                            <h3>인터랙션 포트폴리오 V1</h3>
-                            <p>가속도 센서와 원형 UI를 매칭한 초감각 개인 웹 공간</p>
+                            <h3>Meal App</h3>
+                            <p>급식 앱 iOS 애플리케이션</p>
                             <div class="project-tech-tags">
-                                <span>HTML5</span><span>CSS3</span><span>Vanilla JS</span>
+                                <span>React</span><span>TypeScript</span><span>Flutter</span>
                             </div>
-                            <a href="https://your-link-1.com" target="_blank" class="run-project-btn">
+                            <a href="https://jgj1020.github.io/meal_app/" target="_blank" class="run-project-btn">
                                 실행하기 <i class="fas fa-external-link-alt"></i>
                             </a>
                         </div>
@@ -99,7 +120,8 @@
 
                     <div class="project-glass-card">
                         <div class="project-thumb-wrapper">
-                            <div class="project-thumb" style="background: linear-gradient(135deg, #f12711 0%, #f5af19 100%);">
+                            <div class="project-thumb">
+                                <img src="img/monster-baseball.png" alt="스마트 투두 매니저 캡처 화면">
                                 <span class="platform-badge">APP / WEB</span>
                             </div>
                         </div>
@@ -117,7 +139,8 @@
 
                     <div class="project-glass-card">
                         <div class="project-thumb-wrapper">
-                            <div class="project-thumb" style="background: linear-gradient(135deg, #b3ffab 0%, #12fff7 100%);">
+                            <div class="project-thumb">
+                                <img src="img/자기소개 웹사이트.png" alt="AI 가상 챗봇 스페이스 캡처 화면">
                                 <span class="platform-badge">WEB</span>
                             </div>
                         </div>
