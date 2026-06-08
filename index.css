@@ -513,7 +513,7 @@ body, html {
 
 .samsung-card.open {
     bottom: 50px; 
-    border-color: rgb(41, 145, 213);
+    border-color: rgb(37, 144, 215);
     box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
 }
 
